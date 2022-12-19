@@ -1,7 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newapp/layout/news_app/newslaout.dart';
 import 'package:newapp/network/local/cach_helper.dart';
@@ -11,12 +12,19 @@ import 'package:newapp/shared/cubit/appcubit/cubit.dart';
 import 'package:newapp/shared/cubit/appcubit/states.dart';
 import 'package:newapp/shared/bloc_oserver.dart';
 import 'package:newapp/shared/styles/themes.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 import 'shared/cubit/newcubit/cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  if (Platform.isWindows)
+    await DesktopWindow.setMinWindowSize(
+      Size(
+        350,
+        650,
+      ),
+    );
   Bloc.observer = MyBlocObserver();
   NDioHelper.init();
   await CacheHelper.init();
@@ -63,7 +71,7 @@ class MyApp extends StatelessWidget {
             darkTheme: darkTheme,
             themeMode:
                 AppCubit.get(context).isDark ? ThemeMode.dark : ThemeMode.light,
-            home: const Directionality(
+            home: Directionality(
               textDirection: TextDirection.ltr,
               child: newsLayout(),
             ),

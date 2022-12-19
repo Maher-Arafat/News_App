@@ -9,59 +9,68 @@ import 'package:newapp/shared/cubit/newcubit/cubit.dart';
 import '../../modules/news_app/webview/webview.dart';
 import '../cubit/appcubit/cubit.dart';
 
-Widget buildArticleItem(article, context) => InkWell(
-      onTap: () {
-        NewsCubit.get(context).navigateTo(
-          context,
-          WebViewScreen(url: article['url']),
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Row(
-          children: [
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: NetworkImage('${article['urlToImage']}'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Expanded(
-              child: SizedBox(
+Widget buildArticleItem(article, context, index) => Container(
+      color: NewsCubit.get(context).selectedBusinessItem == index &&
+              NewsCubit.get(context).isDesktop == true
+          ? Colors.grey[200]
+          : null,
+      child: InkWell(
+        onTap: () {
+          // for responsive with more one way
+          // NewsCubit.get(context).navigateTo(
+          //   context,
+          //   WebViewScreen(url: article['url']),
+          // );
+          NewsCubit.get(context).selectBusnissItem(index);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            children: [
+              Container(
+                width: 120,
                 height: 120,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        '${article['title']}',
-                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                              color: AppCubit.get(context).isDark
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Text(
-                      '${article['publishedAt']}',
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                  ],
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: NetworkImage('${article['urlToImage']}'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: 120,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '${article['title']}',
+                          style:
+                              Theme.of(context).textTheme.bodyText1?.copyWith(
+                                    color: AppCubit.get(context).isDark
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        '${article['publishedAt']}',
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -77,7 +86,7 @@ Widget buildArticle(lst, context, {isSearch = false}) => ConditionalBuilder(
       builder: (context) => ListView.separated(
           physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) =>
-              buildArticleItem(lst[index], context),
+              buildArticleItem(lst[index], context, index),
           separatorBuilder: (context, index) => myDivder(),
           itemCount: lst.length),
       fallback: (context) => isSearch

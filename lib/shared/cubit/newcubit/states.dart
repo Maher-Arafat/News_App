@@ -13,6 +13,10 @@ class NewsGetBusinessErrorState extends NewsStates {
   NewsGetBusinessErrorState(this.error);
 }
 
+class NewSelectedBusinessItemState extends NewsStates {}
+
+class NewsSetDesktopState extends NewsStates {}
+
 class NewsGetSportsLoadingState extends NewsStates {}
 
 class NewsGetSportsSuccessState extends NewsStates {}
@@ -30,7 +34,6 @@ class NewsGetScienceErrorState extends NewsStates {
   late final String error;
   NewsGetScienceErrorState(this.error);
 }
-
 
 class NewsGetSearchLoadingState extends NewsStates {}
 

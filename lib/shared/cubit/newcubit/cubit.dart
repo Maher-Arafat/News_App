@@ -15,13 +15,10 @@ class NewsCubit extends Cubit<NewsStates> {
   static NewsCubit get(context) => BlocProvider.of(context);
   int crntIdx = 0;
 
-  
-
-  List<Widget> scrns =  [
+  List<Widget> scrns = [
     const BusinessScreen(),
     const SportsScreen(),
     const ScincseScreen(),
-    
   ];
   List<BottomNavigationBarItem> bottomItms = const [
     BottomNavigationBarItem(
@@ -41,9 +38,14 @@ class NewsCubit extends Cubit<NewsStates> {
   }
 
   List<dynamic> business = [];
+  //List<bool> businessSelectedItem = [];
   List<dynamic> sports = [];
   List<dynamic> science = [];
   List<dynamic> search = [];
+
+  int selectedBusinessItem = 0;
+
+  bool isDesktop = false;
 
   void getBusiness() {
     emit(NewsGetBusinessLoadingState());
@@ -56,12 +58,32 @@ class NewsCubit extends Cubit<NewsStates> {
       },
     ).then((value) {
       business = value.data['articles'];
+      // business.forEach((element) {
+      //   businessSelectedItem.add(false);
+      // });
       print(business[0]['title']);
       emit(NewsGetBusinessSuccessState());
     }).catchError((error) {
       //print(error.toString());
       emit(NewsGetBusinessErrorState(error.toString()));
     });
+  }
+
+  void setDesktop(bool val) {
+    isDesktop = val;
+    emit(NewsSetDesktopState());
+  }
+
+  void selectBusnissItem(index) {
+    selectedBusinessItem = index;
+    // for (int i = 0; i < businessSelectedItem.length; i++) {
+    //   if (i == index) {
+    //     businessSelectedItem[i] = true;
+    //   } else {
+    //     businessSelectedItem[i] = false;
+    //   }
+    // }
+    emit(NewSelectedBusinessItemState());
   }
 
   void getSports() {
